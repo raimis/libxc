@@ -20,9 +20,9 @@ option_with_default(BUILD_FPIC "Libraries will be compiled with position indepen
 if(${BUILD_SHARED_LIBS} AND NOT ${BUILD_FPIC})
     message(FATAL_ERROR "BUILD_SHARED_LIBS ON and BUILD_FPIC OFF are incompatible, as shared library requires position independent code")
 endif()
-#option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library" OFF)
-#option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
-#                  "-xHost" "-march=native")
+option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library" OFF)
+option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
+                  "-xHost" "-march=native")
 option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HAVE_FORTRAN
 # CODE_COVERAGE should be tested and probably propagated to external projects
 #option_with_flags(ENABLE_CODE_COVERAGE "Enables details on code coverage" OFF
@@ -30,7 +30,7 @@ option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HA
 
 ######################### Process & Validate Options ###########################
 include(autocmake_safeguards)
-#include(autocmake_static_library)
+include(autocmake_static_library)
 
 ################################# Main Project #################################
 include(GNUInstallDirs)
@@ -101,6 +101,14 @@ foreach(_src ${sources_list_need_extra_headers})
 endforeach()
 
 add_library(xc ${sources_list} ${zxcv}) #${sources_list_need_extra_headers})
+set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
+                                    COMPILE_FLAGS "-std=c99")
+if(${BUILD_SHARED_LIBS})
+    target_link_libraries(xc PRIVATE ${LIBC_INTERJECT})
+    #if(APPLE)
+    #    set_target_properties(efp PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+    #endif()
+endif()
 
     # run get_funcs.pl to generate headers for xc inclusion
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
