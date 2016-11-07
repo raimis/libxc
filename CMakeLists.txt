@@ -33,6 +33,8 @@ include(autocmake_safeguards)
 #include(autocmake_static_library)
 
 ################################# Main Project #################################
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 set(PN ${PROJECT_NAME})
 
@@ -119,3 +121,40 @@ if(BUILD_TESTING)
     add_subdirectory(testsuite)
 endif()
 
+# <<<  Install  >>>
+
+    # headers NOT namespace protected
+install(FILES ${src_prefix}/xc.h
+              ${src_prefix}/xc_config.h
+              ${src_prefix}/xc_unconfig.h
+              ${gen_dir}/xc_funcs.h
+              ${PROJECT_BINARY_DIR}/xc_version.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(TARGETS xc xc-info
+        EXPORT "${PN}Targets"
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# <<<  Export Interface  >>>
+
+target_compile_definitions(xc INTERFACE USING_${PN})
+target_include_directories(xc INTERFACE
+                           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+# <<<  Export Config  >>>
+
+    # explicit "share" not "DATADIR" for CMake search path
+set(CMAKECONFIG_INSTALL_DIR "share/cmake/${PN}")
+configure_package_config_file(cmake/${PN}Config.cmake.in
+                              "${CMAKE_CURRENT_BINARY_DIR}/${PN}Config.cmake"
+                              INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PN}ConfigVersion.cmake
+                                 VERSION ${${PN}_VERSION}
+                                 COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PN}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${PN}ConfigVersion.cmake
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+install(EXPORT "${PN}Targets"
+        NAMESPACE "${PN}::"
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
