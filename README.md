@@ -30,6 +30,11 @@ Those files will be preserved in this repository (may move to psi4/libxc), but t
 unpacked tarball may be changed to a download command of upstream Libxc. The stress
 here is that the CMake build system is the only value added by this repository.
 
+#### Caveats
+
+* only tested on Linux
+* The generated libxc_docs.txt is large, and the generation step sometimes balks on it, leading to `xc_funcs.h` not found errors. Just execute again.
+
 #### Version
 
 This codebase was copied from upstream (above website) at 3.0.0.
