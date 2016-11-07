@@ -1,5 +1,5 @@
 cmake_policy(SET CMP0048 NEW)  # project_VERSION* variables populated from project(... VERSION x.x.x) string
-project(Libxc 
+project(Libxc
         VERSION 3.0.0
         LANGUAGES C)
 set(Libxc_AUTHORS      "Miguel A.L. Marques")
@@ -20,6 +20,7 @@ option_with_default(BUILD_FPIC "Libraries will be compiled with position indepen
 if(${BUILD_SHARED_LIBS} AND NOT ${BUILD_FPIC})
     message(FATAL_ERROR "BUILD_SHARED_LIBS ON and BUILD_FPIC OFF are incompatible, as shared library requires position independent code")
 endif()
+option_with_default(CMAKE_INSTALL_INCLUDEDIR "Directory to which headers installed. Psi4 wants namespace (e.g., include/libxc)." include)
 option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library" OFF)
 option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
                   "-xHost" "-march=native")
@@ -29,11 +30,11 @@ option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HA
 #                  "-ftest-coverage")
 
 ######################### Process & Validate Options ###########################
+include(GNUInstallDirs)
 include(autocmake_safeguards)
 include(autocmake_static_library)
 
 ################################# Main Project #################################
-include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 set(PN ${PROJECT_NAME})
@@ -166,3 +167,19 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PN}Config.cmake
 install(EXPORT "${PN}Targets"
         NAMESPACE "${PN}::"
         DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+
+#include(CheckFunctionExists)
+#
+#check_function_exists(sqrtf HAVE_SQRTF)
+#if(HAVE_SQRTF)
+#    set_property(GLOBAL APPEND PROPERTY COMPILE_DEFINITIONS HAVE_SQRTF)
+#endif()
+#check_function_exists(cbrtf HAVE_CBRTF)
+#if(HAVE_CBRTF)
+#    set_property(GLOBAL APPEND PROPERTY COMPILE_DEFINITIONS HAVE_CBRTF)
+#endif()
+#check_function_exists(cbrt HAVE_CBRT)
+#if(HAVE_CBRT)
+#    set_property(GLOBAL APPEND PROPERTY COMPILE_DEFINITIONS HAVE_CBRT)
+#endif()
+#check_function_exists(feenableexcept HAVE_FEENABLEEXCEPT)

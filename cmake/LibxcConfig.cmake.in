@@ -13,7 +13,6 @@
 #   Libxc_DEFINITIONS: Definitions necessary to use Libxc, namely USING_Libxc.
 #   Libxc_LIBRARIES - Libxc library to link against.
 #   Libxc_LIBRARY - same as LIBRARIES
-#   Libxc_FRAGLIB_DIRS - Directories (list) where EFP fragments are located
 #
 #
 # Available components: shared static
@@ -22,7 +21,6 @@
 #
 #   shared - search for only shared library
 #   static - search for only static library
-#   shallow - search for only fragment library where directory structure has been collapsed
 #
 #
 # Exported targets:
@@ -89,7 +87,7 @@ elseif(_seek_static GREATER -1)
 endif()
 unset(_temp CACHE)
 find_library(_temp
-             NAMES xc 
+             NAMES xc
              PATHS ${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@
              NO_DEFAULT_PATH)
 if(_temp)
