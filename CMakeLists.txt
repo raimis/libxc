@@ -50,6 +50,9 @@ configure_file(xc_version.h.in xc_version.h @ONLY)
 
 # create dummy config.h
 configure_file(config.h.cmake.in config.h @ONLY)
+message(" STANDARD_MATH_LIBRARY 1: ${STANDARD_MATH_LIBRARY}")
+find_package(StandardMathLibrary)
+message(" STANDARD_MATH_LIBRARY 2: ${STANDARD_MATH_LIBRARY}")
 
 set(raw_sources_list bessel.c            gga_x_airy.c      gga_x_optx.c             lda_c_1d_loos.c     mgga_xc_otpss_d.c
                      expint_e1.c         gga_x_ak13.c      gga_x_pbea.c             lda_c_2d_amgb.c     mgga_xc_zlp.c
