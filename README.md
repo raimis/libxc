@@ -1,4 +1,4 @@
-# libxc
+# libxc [![Build Status](https://travis-ci.org/loriab/libxc.svg?branch=master)](https://travis-ci.org/loriab/libxc)
 
 Miguel A.L. Marques's Libxc (http://www.tddft.org/programs/Libxc) wrapped in CMake for Psi4 (https://github.com/psi4/psi4)
 
