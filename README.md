@@ -4,7 +4,7 @@ Miguel A.L. Marques's Libxc (http://www.tddft.org/programs/Libxc) wrapped in CMa
 
 ### History
 
-This is the Libxc project (http://www-stone.ch.cam.ac.uk/programs.html) by
+This is the Libxc project (http://www.tddft.org/programs/Libxc) by
 Prof. Miguel A.L. Marques of Martin-Luther-Universität Halle-Wittenberg.
 
 Libxc is written in C. It has source and manual are available at the above
@@ -33,7 +33,7 @@ here is that the CMake build system is the only value added by this repository.
 #### Caveats
 
 * only tested on Linux
-* The generated libxc_docs.txt is large, and the generation step sometimes balks on it, leading to `xc_funcs.h` not found errors. Just execute again.
+* The generated `libxc_docs.txt` is large, and the generation step sometimes balks on it, leading to `xc_funcs.h` not found errors. Just execute again.
 
 #### Version
 
