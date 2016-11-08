@@ -53,6 +53,9 @@ configure_file(config.h.cmake.in config.h @ONLY)
 message(" STANDARD_MATH_LIBRARY 1: ${STANDARD_MATH_LIBRARY}")
 find_package(StandardMathLibrary)
 message(" STANDARD_MATH_LIBRARY 2: ${STANDARD_MATH_LIBRARY}")
+message(" LIBM_LIBRARIES ${LIBM_LIBRARIES}")
+find_package(M)
+message(" LIBM_LIBRARIES ${LIBM_LIBRARIES}")
 
 set(raw_sources_list bessel.c            gga_x_airy.c      gga_x_optx.c             lda_c_1d_loos.c     mgga_xc_otpss_d.c
                      expint_e1.c         gga_x_ak13.c      gga_x_pbea.c             lda_c_2d_amgb.c     mgga_xc_zlp.c
@@ -105,6 +108,7 @@ foreach(_src ${sources_list_need_extra_headers})
 endforeach()
 
 add_library(xc ${sources_list} ${zxcv}) #${sources_list_need_extra_headers})
+target_link_libraries(xc PUBLIC ${LIBM_LIBRARIES})
 set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
                                     COMPILE_FLAGS "-std=c99")
 if(${BUILD_SHARED_LIBS})
