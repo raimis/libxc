@@ -1,5 +1,6 @@
 # * downloaded Nov 2016 from https://android.googlesource.com/platform/external/eigen/+/master/cmake/FindStandardMathLibrary.cmake
 # * changed CXX to C
+# * note that full path to libm *not* detected
 
 # - Try to find how to link to the standard math library, if anything at all is needed to do.
 # On most platforms this is automatic, but for example it's not automatic on QNX.
@@ -18,9 +19,11 @@ include(CheckCSourceCompiles)
 # a little test program for c++ math functions.
 # notice the std:: is required on some platforms such as QNX
 set(find_standard_math_library_test_program
-"#include<cmath>
+"#include<math.h>
 int main() { sin(0.0); log(0.0f); }")
-#int main() { std::sin(0.0); std::log(0.0f); }")
+# C++ test program
+# "#include<cmath>
+# int main() { std::sin(0.0); std::log(0.0f); }")
 # first try compiling/linking the test program without any linker flags
 set(CMAKE_REQUIRED_FLAGS "")
 set(CMAKE_REQUIRED_LIBRARIES "")

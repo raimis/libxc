@@ -129,10 +129,9 @@ before_script:
     cmake -Bbuild -H. 
     -DCMAKE_C_COMPILER=${C_COMPILER} 
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} 
+    -DBUILD_SHARED_LIBS=ON
     -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/Install
 - cd build
 - ../.scripts/travis_build.sh
 script:
-- ls -l
-#- python ../.scripts/travis_run_test.py
-#- python ../.scripts/travis_print_failing.py
+- ldd -v libxc.so
