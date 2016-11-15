@@ -20,7 +20,7 @@ option_with_default(BUILD_FPIC "Libraries will be compiled with position indepen
 if(${BUILD_SHARED_LIBS} AND NOT ${BUILD_FPIC})
     message(FATAL_ERROR "BUILD_SHARED_LIBS ON and BUILD_FPIC OFF are incompatible, as shared library requires position independent code")
 endif()
-option_with_default(CMAKE_INSTALL_INCLUDEDIR "Directory to which headers installed. Psi4 wants namespace (e.g., include/libxc)." include)
+option_with_default(NAMESPACE_INSTALL_INCLUDEDIR "Location within CMAKE_INSTALL_INCLUDEDIR to which headers are installed. Psi4 wants namespace (e.g., /libxc)" /)
 option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library" OFF)
 option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
                   "-xHost" "-march=native")
@@ -142,7 +142,7 @@ install(FILES ${src_prefix}/xc.h
               ${src_prefix}/xc_unconfig.h
               ${gen_dir}/xc_funcs.h
               ${PROJECT_BINARY_DIR}/xc_version.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}${NAMESPACE_INSTALL_INCLUDEDIR})
 install(TARGETS xc xc-info
         EXPORT "${PN}Targets"
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -63,7 +63,7 @@ set (_valid_components
 # find includes
 unset(_temp_h CACHE)
 find_path(_temp_h
-          NAMES xc.h
+          NAMES @NAMESPACE_INSTALL_INCLUDEDIR@/xc.h
           PATHS ${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@
           NO_DEFAULT_PATH)
 if(_temp_h)
