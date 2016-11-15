@@ -104,6 +104,12 @@ foreach(_src ${sources_list_need_extra_headers})
     file(WRITE ${PROJECT_BINARY_DIR}/${_src} "${_headered_src}")
 endforeach()
 
+    # when headers namespaced, xc_version include in xc.h needs to be local, not
+    #   system to be found
+file(READ ${src_prefix}xc.h _src_contents)
+string(REPLACE "<xc_version.h>" "\"xc_version.h\"" _quoted_src ${_src_contents})
+file(WRITE ${PROJECT_BINARY_DIR}/${src_prefix}xc.h "${_quoted_src}")
+
 add_library(xc ${sources_list} ${zxcv}) #${sources_list_need_extra_headers})
 target_link_libraries(xc INTERFACE ${STANDARD_MATH_LIBRARY})
 set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
@@ -119,6 +125,9 @@ endif()
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir}
+    TIMEOUT 5
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+execute_process(
     COMMAND ${PERL_EXECUTABLE} ${src_prefix}/get_funcs.pl ${src_prefix} ${gen_dir}
     TIMEOUT 5
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
@@ -126,7 +135,8 @@ execute_process(
 add_executable(xc-info "${src_prefix}/xc-info.c")
 target_link_libraries(xc-info xc)
 
-include_directories(${PROJECT_SOURCE_DIR}/${src_prefix}  # for xc.h, util.h, xc_config.h
+include_directories(${PROJECT_SOURCE_DIR}/${src_prefix}  # for util.h, xc_config.h
+                    ${PROJECT_BINARY_DIR}/${src_prefix}  # for xc.h
                     ${PROJECT_BINARY_DIR}  # for xc_version.h, config.h
                     ${gen_dir})  # for xc_funcs.h
 
@@ -137,8 +147,8 @@ endif()
 
 # <<<  Install  >>>
 
-    # headers NOT namespace protected
-install(FILES ${src_prefix}/xc.h
+    # by default, headers NOT namespace protected
+install(FILES ${PROJECT_BINARY_DIR}/${src_prefix}/xc.h
               ${src_prefix}/xc_config.h
               ${src_prefix}/xc_unconfig.h
               ${gen_dir}/xc_funcs.h
