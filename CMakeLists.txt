@@ -120,6 +120,7 @@ set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir}
     COMMAND ${PERL_EXECUTABLE} ${src_prefix}/get_funcs.pl ${src_prefix} ${gen_dir}
+    TIMEOUT 5
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 add_executable(xc-info "${src_prefix}/xc-info.c")
