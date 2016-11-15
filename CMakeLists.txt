@@ -107,7 +107,7 @@ endforeach()
     # when headers namespaced, xc_version include in xc.h needs to be local, not
     #   system to be found
 file(READ ${src_prefix}xc.h _src_contents)
-string(REPLACE "<xc_version.h>" "\"xc_version.h\"" _quoted_src ${_src_contents})
+string(REPLACE "<xc_version.h>" "\"xc_version.h\"" _quoted_src "${_src_contents}")
 file(WRITE ${PROJECT_BINARY_DIR}/${src_prefix}xc.h "${_quoted_src}")
 
 add_library(xc ${sources_list} ${zxcv}) #${sources_list_need_extra_headers})
