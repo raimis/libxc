@@ -24,7 +24,7 @@ option_with_default(NAMESPACE_INSTALL_INCLUDEDIR "Location within CMAKE_INSTALL_
 option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library" OFF)
 option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
                   "-xHost" "-march=native")
-option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HAVE_FORTRAN
+#option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HAVE_FORTRAN
 
 ######################### Process & Validate Options ###########################
 include(autocmake_safeguards)

@@ -16,15 +16,12 @@ Libxc has been in the *ab initio* quantum chemistry package Psi4
 (http://psicode.org/, https://github.com/psi4/psi4) since Novenber 2016. In Psi4,
 it builds with `cmake`. This repository contains an unpacked tarball of Libxc 3.0.0
 source, which is otherwise untouched, and the files below
-<!--and has an interface to C++ and Psi4 internals designed
-by @andysim. Manual for GDMA+Psi4 at http://psicode.org/psi4manual/master/gdma.html.
-This repository is GDMA wrapped up nicely in CMake.-->
 
 * [cmake/](cmake) directory
 * [CMakeLists.txt](CMakeLists.txt) top-level
 * [testsuite/CMakeLists.txt](testsuite/CMakeLists.txt) tests
 * [config.h.cmake.in](config.h.cmake.in) a dummy config file
-* this README.md
+* this README-CMake.md
 
 Those files will be preserved in this repository (may move to psi4/libxc), but the
 unpacked tarball may be changed to a download command of upstream Libxc. The stress
@@ -32,7 +29,9 @@ here is that the CMake build system is the only value added by this repository.
 
 #### Caveats
 
-* only tested on Linux
+* tested on Linux and Mac, static and shared lib, namespaced and non-namespaced headers, but really only to the extent that it works for Psi4
+* all the fancy libtool options and Fortran interface _not_ tested
+* test suite executed after build via `ctest`. But it has always totally passed or totally failed, which doesn't inspire confidence
 * The generated `libxc_docs.txt` is large, and the generation step sometimes balks on it, leading to `xc_funcs.h` not found errors. Just execute again.
 
 #### Version
@@ -51,7 +50,8 @@ The build is also responsive to
 
 * static/shared toggle `BUILD_SHARED_LIBS`
 * install location `CMAKE_INSTALL_PREFIX`
-* of course, `CMAKE_C_COMPILER`, `BUILD_TESTING`, and `CMAKE_Fortran_FLAGS`
+* namespacing of headers `NAMESPACE_INSTALL_INCLUDEDIR`
+* of course, `CMAKE_C_COMPILER`, `BUILD_TESTING`, and `CMAKE_C_FLAGS`
 
 See [CMakeLists.txt](CMakeLists.txt) for options details. All these build options should be passed as `cmake -DOPTION`.
 
@@ -59,7 +59,7 @@ See [CMakeLists.txt](CMakeLists.txt) for options details. All these build option
 
 This project installs with `LibxcConfig.cmake`, `LibxcConfigVersion.cmake`, and `LibxcTargets.cmake` files suitable for use with CMake [`find_package()`](https://cmake.org/cmake/help/v3.2/command/find_package.html) in `CONFIG` mode.
 
-* `find_package(Libxc)` - find any gdma libraries and headers
+* `find_package(Libxc)` - find any xc libraries and headers
 * `find_package(Libxc 3.0.0 EXACT CONFIG REQUIRED COMPONENTS static)` - find Libxc exactly version 3.0.0 built with static libraries or die trying
 
 See [cmake/LibxcConfig.cmake.in](cmake/LibxcConfig.cmake.in) for details of how to detect the Config file and what CMake variables and targets are exported to your project.
