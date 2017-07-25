@@ -92,17 +92,17 @@ set(sources_list_need_extra_headers ${src_prefix}work_gga_x.c
                                     ${src_prefix}work_lda.c
                                     ${src_prefix}work_mgga_c.c
                                     ${src_prefix}work_mgga_x.c)
-set(zxcv ${PROJECT_BINARY_DIR}/${src_prefix}work_gga_x.c
-         ${PROJECT_BINARY_DIR}/${src_prefix}work_lda.c
-         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_c.c
-         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_x.c)
+#set(zxcv ${PROJECT_BINARY_DIR}/${src_prefix}work_gga_x.c
+#         ${PROJECT_BINARY_DIR}/${src_prefix}work_lda.c
+#         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_c.c
+#         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_x.c)
 
-foreach(_src ${sources_list_need_extra_headers})
-    file(READ ${_src} _src_contents)
-    #string(CONCAT _headered_src "#include <util.h>\n" "${_src_contents}")
-    string(CONCAT _headered_src "#include <stdio.h>\n#include \"util.h\"\n" "${_src_contents}")
-    file(WRITE ${PROJECT_BINARY_DIR}/${_src} "${_headered_src}")
-endforeach()
+#foreach(_src ${sources_list_need_extra_headers})
+#    file(READ ${_src} _src_contents)
+#    #string(CONCAT _headered_src "#include <util.h>\n" "${_src_contents}")
+#    string(CONCAT _headered_src "#include <stdio.h>\n#include \"util.h\"\n" "${_src_contents}")
+#    file(WRITE ${PROJECT_BINARY_DIR}/${_src} "${_headered_src}")
+#endforeach()
 
     # when headers namespaced, xc_version include in xc.h needs to be local, not
     #   system to be found
@@ -110,7 +110,7 @@ file(READ ${src_prefix}xc.h _src_contents)
 string(REPLACE "<xc_version.h>" "\"xc_version.h\"" _quoted_src "${_src_contents}")
 file(WRITE ${PROJECT_BINARY_DIR}/${src_prefix}xc.h "${_quoted_src}")
 
-add_library(xc ${sources_list} ${zxcv}) #${sources_list_need_extra_headers})
+add_library(xc ${sources_list}) # ${zxcv}) #${sources_list_need_extra_headers})
 target_link_libraries(xc INTERFACE ${STANDARD_MATH_LIBRARY})
 set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
                                     COMPILE_FLAGS "-std=c99")
