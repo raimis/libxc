@@ -6,7 +6,7 @@ set(Libxc_AUTHORS      "Miguel A.L. Marques")
 set(Libxc_DESCRIPTION  "Exchange-correlation functionals for density-functional theory")
 set(Libxc_EMAIL        "libxc@tddft.org")
 set(Libxc_URL          "http://www.tddft.org/programs/Libxc")
-set(Libxc_LICENSE      "GNU Lesser General Public License, version 3")
+set(Libxc_LICENSE      "GNU Lesser General Public License, version 3 (LGPL-3.0)")
 
 cmake_minimum_required(VERSION 3.0)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -25,16 +25,13 @@ option_with_print(ENABLE_GENERIC "Enable mostly static linking in shared library
 option_with_flags(ENABLE_XHOST "Enable processor-specific optimization" ON
                   "-xHost" "-march=native")
 option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HAVE_FORTRAN
-# CODE_COVERAGE should be tested and probably propagated to external projects
-#option_with_flags(ENABLE_CODE_COVERAGE "Enables details on code coverage" OFF
-#                  "-ftest-coverage")
 
 ######################### Process & Validate Options ###########################
-include(GNUInstallDirs)
 include(autocmake_safeguards)
 include(custom_static_library)
 
 ################################# Main Project #################################
+include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 set(PN ${PROJECT_NAME})
@@ -88,40 +85,25 @@ set(raw_sources_list bessel.c            gga_x_airy.c      gga_x_optx.c         
 set(src_prefix "src/")
 string(REGEX REPLACE "([^;]+)" "${src_prefix}\\1" sources_list "${raw_sources_list}")
 
-set(sources_list_need_extra_headers ${src_prefix}work_gga_x.c
-                                    ${src_prefix}work_lda.c
-                                    ${src_prefix}work_mgga_c.c
-                                    ${src_prefix}work_mgga_x.c)
-#set(zxcv ${PROJECT_BINARY_DIR}/${src_prefix}work_gga_x.c
-#         ${PROJECT_BINARY_DIR}/${src_prefix}work_lda.c
-#         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_c.c
-#         ${PROJECT_BINARY_DIR}/${src_prefix}work_mgga_x.c)
-
-#foreach(_src ${sources_list_need_extra_headers})
-#    file(READ ${_src} _src_contents)
-#    #string(CONCAT _headered_src "#include <util.h>\n" "${_src_contents}")
-#    string(CONCAT _headered_src "#include <stdio.h>\n#include \"util.h\"\n" "${_src_contents}")
-#    file(WRITE ${PROJECT_BINARY_DIR}/${_src} "${_headered_src}")
-#endforeach()
-
-    # when headers namespaced, xc_version include in xc.h needs to be local, not
-    #   system to be found
+# when headers namespaced, xc_version include in xc.h needs to be local, not
+#   system to be found
 file(READ ${src_prefix}xc.h _src_contents)
 string(REPLACE "<xc_version.h>" "\"xc_version.h\"" _quoted_src "${_src_contents}")
 file(WRITE ${PROJECT_BINARY_DIR}/${src_prefix}xc.h "${_quoted_src}")
 
-add_library(xc ${sources_list}) # ${zxcv}) #${sources_list_need_extra_headers})
+# STATIC/SHARED on below governed by BUILD_SHARED_LIBS
+add_library(xc ${sources_list})
 target_link_libraries(xc INTERFACE ${STANDARD_MATH_LIBRARY})
 set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
                                     COMPILE_FLAGS "-std=c99")
 if(${BUILD_SHARED_LIBS})
     target_link_libraries(xc PRIVATE ${LIBC_INTERJECT})
-    #if(APPLE)
-    #    set_target_properties(efp PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-    #endif()
+    if(APPLE)
+        set_target_properties(xc PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+    endif()
 endif()
 
-    # run get_funcs.pl to generate headers for xc inclusion
+# run get_funcs.pl to generate headers for xc inclusion
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir}
@@ -147,7 +129,7 @@ endif()
 
 # <<<  Install  >>>
 
-    # by default, headers NOT namespace protected
+# by default, headers NOT namespace protected
 install(FILES ${PROJECT_BINARY_DIR}/${src_prefix}/xc.h
               ${src_prefix}/xc_config.h
               ${src_prefix}/xc_unconfig.h
@@ -168,14 +150,14 @@ target_include_directories(xc INTERFACE
 
 # <<<  Export Config  >>>
 
-    # explicit "share" not "DATADIR" for CMake search path
+# GNUInstallDirs "DATADIR" wrong here; CMake search path wants "share".
 set(CMAKECONFIG_INSTALL_DIR "share/cmake/${PN}")
 configure_package_config_file(cmake/${PN}Config.cmake.in
                               "${CMAKE_CURRENT_BINARY_DIR}/${PN}Config.cmake"
                               INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR})
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PN}ConfigVersion.cmake
                                  VERSION ${${PN}_VERSION}
-                                 COMPATIBILITY SameMajorVersion)
+                                 COMPATIBILITY AnyNewerVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PN}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PN}ConfigVersion.cmake
         DESTINATION ${CMAKECONFIG_INSTALL_DIR})

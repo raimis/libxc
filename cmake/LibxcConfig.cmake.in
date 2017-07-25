@@ -1,7 +1,7 @@
 # LibxcConfig.cmake
 # ------------------
 #
-# LIBEFP cmake module.
+# Libxc cmake module.
 # This module sets the following variables in your project:
 #
 # ::
