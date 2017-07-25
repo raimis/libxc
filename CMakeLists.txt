@@ -32,7 +32,7 @@ option_with_print(HAVE_FORTRAN "Build Fortran interface" OFF)  # todo add_def HA
 ######################### Process & Validate Options ###########################
 include(GNUInstallDirs)
 include(autocmake_safeguards)
-include(autocmake_static_library)
+include(custom_static_library)
 
 ################################# Main Project #################################
 include(CMakePackageConfigHelpers)
