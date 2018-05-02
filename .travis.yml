@@ -135,3 +135,7 @@ before_script:
 - ../.scripts/travis_build.sh
 script:
 - ldd -v libxc.so
+
+branches:
+  only:
+  - master
