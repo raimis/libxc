@@ -282,6 +282,7 @@ if(${BUILD_SHARED_LIBS})
 endif()
 
 # run get_funcs.pl to generate headers for xc inclusion
+find_package(Perl)
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E make_directory ${gen_dir}
