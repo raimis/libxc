@@ -293,14 +293,13 @@ execute_process(
     TIMEOUT 5
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
-link_libraries(xc)
+#include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 add_executable(xc-info "${src_prefix}/xc-info.c")
-#target_link_libraries(xc-info xc)
+target_link_libraries(xc-info xc)
 
 add_executable(xc-threshold "${src_prefix}/xc-threshold.c")
-#target_link_libraries(xc-threshold xc)
+target_link_libraries(xc-threshold xc)
 
 include_directories(${PROJECT_SOURCE_DIR}/${src_prefix}  # for util.h
                     ${PROJECT_BINARY_DIR}/${src_prefix}  # for xc.h
