@@ -8,7 +8,10 @@ before_build:
   - cd ..
   - mkdir build
   - cd build
-  - cmake -A x64 ..\libxc
+  - cmake -A x64
+          -DBUILD_TESTING=OFF
+          ..\libxc
+  - dir gen_funcidx
 
 build_script:
   - cmake --build .
