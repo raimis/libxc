@@ -281,6 +281,11 @@ if(${BUILD_SHARED_LIBS})
     endif()
 endif()
 
+if(MSVC)
+    # Suppress MSVC warnings
+    set_target_properties(xc PROPERTIES COMPILE_FLAGS "/wd4101 /wd4996")
+endif(MSVC)
+
 # run get_funcs.pl to generate headers for xc inclusion
 find_package(Perl)
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
@@ -292,8 +297,6 @@ execute_process(
     COMMAND ${PERL_EXECUTABLE} scripts/get_funcs.pl ${src_prefix} ${gen_dir}
     TIMEOUT 5
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-
-#include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 add_executable(xc-info "${src_prefix}/xc-info.c")
 target_link_libraries(xc-info xc)

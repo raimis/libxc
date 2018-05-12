@@ -1,4 +1,3 @@
-#include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 link_libraries(xc)
 add_executable(xc-consistency xc-consistency.c)
 add_executable(xc-error xc-error.c)
