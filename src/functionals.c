@@ -10,7 +10,12 @@
 #include "xc.h"
 #include "funcs_key.c"
 #include <string.h>
+#ifndef _MSC_VER
 #include <strings.h>
+#else
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#endif
 
 extern xc_func_info_type 
   *xc_lda_known_funct[], 
