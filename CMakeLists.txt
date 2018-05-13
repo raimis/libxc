@@ -281,11 +281,6 @@ if(${BUILD_SHARED_LIBS})
     endif()
 endif()
 
-if(MSVC)
-    # Suppress MSVC warnings
-    set_target_properties(xc PROPERTIES COMPILE_FLAGS "/wd4101 /wd4996")
-endif(MSVC)
-
 # run get_funcs.pl to generate headers for xc inclusion
 find_package(Perl)
 set(gen_dir "${PROJECT_BINARY_DIR}/gen_funcidx")
@@ -303,6 +298,7 @@ target_link_libraries(xc-info xc)
 
 add_executable(xc-threshold "${src_prefix}/xc-threshold.c")
 target_link_libraries(xc-threshold xc)
+
 
 include_directories(${PROJECT_SOURCE_DIR}/${src_prefix}  # for util.h
                     ${PROJECT_BINARY_DIR}/${src_prefix}  # for xc.h
