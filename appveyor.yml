@@ -2,8 +2,6 @@ image: Visual Studio 2017
 clone_depth: 5
 
 install:
-  - dir C:\cygwin64
-  - dir C:\cygwin64\bin
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 
 before_build:
@@ -16,4 +14,4 @@ build_script:
   - cmake --build .
 
 test_script:
-  - ctest
+  - ctest --build-config Debug
