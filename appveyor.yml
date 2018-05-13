@@ -9,8 +9,8 @@ before_build:
   - mkdir build
   - cd build
   - cmake -A x64
+          -DENABLE_XHOST=OFF
           -DCMAKE_C_FLAGS="/wd4101 /wd4996"
-          -DBUILD_TESTING=OFF
           ..\libxc
 
 build_script:
