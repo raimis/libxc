@@ -5,8 +5,7 @@ add_executable(xc-get_data xc-get_data.c)
 add_executable(xc-regression xc-regression.c)
 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/workdir)
-#set(_sdirs lda_x lda_c lda_xc lda_k gga_x gga_c gga_xc gga_k mgga_x mgga_c mgga_xc mgga_k hyb_gga_x hyb_gga_xc hyb_mgga_x hyb_mgga_xc)
-set(_sdirs lda_x lda_c lda_xc lda_k gga_x gga_c gga_xc gga_k mgga_c mgga_xc mgga_k hyb_gga_x)
+set(_sdirs lda_x lda_c lda_xc lda_k gga_x gga_c gga_xc gga_k mgga_x mgga_c mgga_xc mgga_k hyb_gga_x hyb_gga_xc hyb_mgga_x hyb_mgga_xc)
 foreach(_sdir ${_sdirs})
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir})
     file(GLOB _bz2s RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "regression/${_sdir}/*.bz2")
@@ -42,8 +41,10 @@ foreach(_sdir ${_sdirs})
                            COMMAND xc-regression ARGS ${func} ${nspin} ${order} "${CMAKE_CURRENT_SOURCE_DIR}/input/${system}" "${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir}/${refname}")
 
         # the testing itself
-        add_test(NAME "${func}-${system}-${spin}-${order}"
-             	 COMMAND xc-error "${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir}/${refname}" "${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir}/${refname}_ref" "${tol}")
+        set(test "${func}-${system}-${spin}-${order}")
+        add_test(NAME ${test}
+                 COMMAND xc-error "${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir}/${refname}" "${CMAKE_CURRENT_BINARY_DIR}/workdir/${_sdir}/${refname}_ref" "${tol}")
+        set_tests_properties(${test} PROPERTIES TIMEOUT 1)
     endforeach()
 endforeach()
 

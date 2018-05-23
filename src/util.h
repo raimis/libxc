@@ -109,7 +109,7 @@ double xc_bessel_K0(const double x);
 double xc_bessel_K1_scaled(const double x);
 double xc_bessel_K1(const double x);
 
-double xc_expint_e1_impl(const double x, const int scale);
+double xc_expint_e1_impl(double x, const int scale);
 static inline double expint_e1(const double x)         { return  xc_expint_e1_impl( x, 0); }
 static inline double expint_e1_scaled(const double x)  { return  xc_expint_e1_impl( x, 1); }
 static inline double expint_Ei(const double x)         { return -xc_expint_e1_impl(-x, 0); }
