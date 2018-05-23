@@ -5,16 +5,14 @@ install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 
 before_build:
-  - cd ..
-  - mkdir build
-  - cd build
+  - mkdir libxc_build && cd libxc_build
   - cmake -A x64
           -DENABLE_XHOST=OFF
           -DCMAKE_C_FLAGS="/wd4101 /wd4996"
-          ..\libxc
+          ..
 
 build_script:
   - cmake --build .
 
 test_script:
-  - ctest --build-config Debug
+  - ctest --build-config Debug --verbose
