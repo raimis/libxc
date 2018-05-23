@@ -163,7 +163,7 @@ typedef struct xc_func_type xc_func_type;
 
 /* functionals */
 int   xc_functional_get_number(const char *name);
-char *xc_functional_get_name(int number);
+char *xc_functional_get_name(const int number);
 int   xc_family_from_id(int id, int *family, int *number);
 int   xc_number_of_functionals();
 int   xc_maximum_name_length();
