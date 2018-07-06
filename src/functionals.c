@@ -10,11 +10,11 @@
 #include "xc.h"
 #include "funcs_key.c"
 #include <string.h>
-#ifndef _MSC_VER
-#include <strings.h>
-#else
+#ifdef _MSC_VER
 #define strcasecmp _stricmp
 #define strncasecmp _strnicmp
+#else
+#include <strings.h>
 #endif
 
 extern xc_func_info_type 
