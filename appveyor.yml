@@ -1,19 +1,25 @@
-image: Visual Studio 2017
-clone_depth: 5
+clone_depth: 1
+platform: x64
 
-install:
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+
+configuration:
+  - Release
 
 before_build:
   - mkdir libxc_build && cd libxc_build
-  - cmake -A x64
+  - cmake -A %PLATFORM%
+          -DCMAKE_BUILD_TYPE=%CONFIGURATION%
           -DENABLE_XHOST=OFF
           -DCMAKE_C_FLAGS="/wd4101 /wd4996"
           ..
 
 build_script:
   - cmake --build .
+          --config %CONFIGURATION%
 
 test_script:
-  - ctest --build-config Debug
-          -E "mgga_x_b00-*" # Broken on Windows
+  - ctest --build-config %CONFIGURATION%
+          --output-on-failure
